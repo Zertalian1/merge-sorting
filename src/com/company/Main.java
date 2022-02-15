@@ -15,9 +15,7 @@ public class Main {
         int fileStart=parseParam(args);
         String outFile = args[fileStart];
         String[] inputList = new String[args.length-++fileStart];
-        for(int i=0; i< args.length-fileStart;i++){
-            inputList[i]=args[i+fileStart];
-        }
+        if (args.length - fileStart >= 0) System.arraycopy(args, fileStart, inputList, 0, args.length - fileStart);
         List<BufferedReader> readerList = new ArrayList<>();
         List<String> dataList = new ArrayList<>();
         for (String s : inputList) {
