@@ -89,25 +89,6 @@ public class Main {
     private static int findMinMax(List<String> dataList){
         int place=0;
         for(int i=1;i<dataList.size();i++){
-            /*if(isInteger){
-                int a = Integer.parseInt(dataList.get(place));
-                int b = Integer.parseInt(dataList.get(i));
-                if(a> b){
-                    if(!isReverse)
-                        place = i;
-                }else{
-                    if(isReverse)
-                        place = i;
-                }
-            }else{
-                if(dataList.get(place).length()>dataList.get(i).length()) {
-                    if(!isReverse)
-                        place = i;
-                }else{
-                    if(isReverse)
-                        place = i;
-                }
-            }*/
             if(Comp(dataList.get(place),dataList.get(i)))
                 place=i;
         }
