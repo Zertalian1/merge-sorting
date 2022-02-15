@@ -20,10 +20,10 @@ public class Main {
         }
         List<BufferedReader> readerList = new ArrayList<>();
         List<String> dataList = new ArrayList<>();
-        for(int i=0;i<inputList.length;i++){
-            FileReader fr = null;
+        for (String s : inputList) {
+            FileReader fr;
             try {
-                fr = new FileReader(inputList[i]);
+                fr = new FileReader(s);
                 readerList.add(new BufferedReader(fr));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -31,7 +31,7 @@ public class Main {
             }
         }
         for(int i= 0; i<readerList.size();i++){
-            String temp = null;
+            String temp;
             try {
                 temp = readData(readerList.get(i));
                 if(temp!=null)
@@ -48,7 +48,7 @@ public class Main {
 
 
 
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(outFile));){
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(outFile))){
             mergeSort(readerList, dataList, out);
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,16 +74,12 @@ public class Main {
         if(isInteger){
             int n1 = Integer.parseInt(a);
             int n2 = Integer.parseInt(b);
-            if(!isReverse && n1>n2 || isReverse && n2>n1)
-                return true;
+            return !isReverse && n1 > n2 || isReverse && n2 > n1;
         }else{
             int l1=a.length();
             int l2=b.length();
-            if(l1>l2 && !isReverse || l1<l2 && isReverse) {
-                return true;
-            }
+            return l1 > l2 && !isReverse || l1 < l2 && isReverse;
         }
-        return  false;
     }
 
     private static int findMinMax(List<String> dataList){
@@ -125,7 +121,7 @@ public class Main {
         }
         if(isInteger && data != null){
             try {
-                int i=Integer.parseInt(data);
+                Integer.parseInt(data);
             }catch (Exception e){
                 //e.printStackTrace();
                 System.out.println("invalid data type");
