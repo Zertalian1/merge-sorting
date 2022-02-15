@@ -11,7 +11,7 @@ public class Main {
 
 
 
-    public static void main(String[] args)/* throws IOException*/ {
+    public static void main(String[] args) {
         int fileStart=parseParam(args);
         String outFile = args[fileStart];
         String[] inputList = new String[args.length-++fileStart];
@@ -70,10 +70,26 @@ public class Main {
         }
     }
 
+    private static boolean Comp(String a, String b){
+        if(isInteger){
+            int n1 = Integer.parseInt(a);
+            int n2 = Integer.parseInt(b);
+            if(!isReverse && n1>n2 || isReverse && n2>n1)
+                return true;
+        }else{
+            int l1=a.length();
+            int l2=b.length();
+            if(l1>l2 && !isReverse || l1<l2 && isReverse) {
+                return true;
+            }
+        }
+        return  false;
+    }
+
     private static int findMinMax(List<String> dataList){
         int place=0;
         for(int i=1;i<dataList.size();i++){
-            if(isInteger){
+            /*if(isInteger){
                 int a = Integer.parseInt(dataList.get(place));
                 int b = Integer.parseInt(dataList.get(i));
                 if(a> b){
@@ -91,7 +107,9 @@ public class Main {
                     if(isReverse)
                         place = i;
                 }
-            }
+            }*/
+            if(Comp(dataList.get(place),dataList.get(i)))
+                place=i;
         }
         return place;
     }
@@ -102,8 +120,8 @@ public class Main {
            out.write(dataList.get(place) + "\n");
            try {
                String temp =readData(readerList.get(place));
-               if(temp!=null)
-                dataList.set(place, temp);
+               if(temp!=null && !Comp(dataList.get(place),temp))
+                    dataList.set(place, temp);
                else{
                    readerList.get(place).close();
                    readerList.remove(place);
@@ -113,6 +131,7 @@ public class Main {
                e.printStackTrace();
            }
        }
+
        out.close();
     }
 
@@ -122,6 +141,15 @@ public class Main {
             for(int i=0;i<data.length();i++){
                 if(data.charAt(i)==' ')
                     return null;
+            }
+        }
+        if(isInteger && data != null){
+            try {
+                int i=Integer.parseInt(data);
+            }catch (Exception e){
+                //e.printStackTrace();
+                System.out.println("invalid data type");
+                return null;
             }
         }
         return data;
