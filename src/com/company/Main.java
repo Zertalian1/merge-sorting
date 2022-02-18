@@ -67,18 +67,6 @@ public class Main {
         }
     }
 
- /*   private static boolean Comp(String a, String b){
-        if(isInteger){
-            int n1 = Integer.parseInt(a);
-            int n2 = Integer.parseInt(b);
-            return !isReverse && n1 > n2 || isReverse && n2 > n1;
-        }else{
-            int l1=a.length();
-            int l2=b.length();
-            return l1 > l2 && !isReverse || l1 < l2 && isReverse;
-        }
-    }*/
-
     private static int findMinMax(List<Pair> pairs){
         int place=0;
         for(int i=1;i<pairs.size();i++){
@@ -110,24 +98,6 @@ public class Main {
        out.close();
     }
 
-    /*private static String readData(BufferedReader bufferedReader) throws IOException {
-        String data = bufferedReader.readLine();
-        if(!isInteger && data != null){
-            for(int i=0;i<data.length();i++){
-                if(data.charAt(i)==' ')
-                    return null;
-            }
-        }
-        if(isInteger && data != null){
-            try {
-                Integer.parseInt(data);
-            }catch (Exception e){
-                //e.printStackTrace();
-                System.out.println("invalid data type");
-                return null;
-            }
-        }
-        return data;
-    }*/
+
 
 }
