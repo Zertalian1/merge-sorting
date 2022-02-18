@@ -16,27 +16,26 @@ public class Main {
         String outFile = args[fileStart];
         String[] inputList = new String[args.length-++fileStart];
         if (args.length - fileStart >= 0) System.arraycopy(args, fileStart, inputList, 0, args.length - fileStart);
-        List<BufferedReader> readerList = new ArrayList<>();
-        List<String> dataList = new ArrayList<>();
+        List<Pair> pairs = new ArrayList<>();
         for (String s : inputList) {
             FileReader fr;
             try {
                 fr = new FileReader(s);
-                readerList.add(new BufferedReader(fr));
+                pairs.add(new Pair(new BufferedReader(fr)));
             } catch (IOException e) {
                 e.printStackTrace();
 
             }
         }
-        for(int i= 0; i<readerList.size();i++){
+        for(int i= 0; i<pairs.size();i++){
             String temp;
             try {
-                temp = readData(readerList.get(i));
+                temp = pairs.get(i).readData(isInteger);
                 if(temp!=null)
-                    dataList.add(temp);
+                    pairs.get(i).setData(temp);
                 else{
-                    readerList.get(i).close();
-                    readerList.remove(i);
+                    pairs.get(i).getIn().close();
+                    pairs.remove(i);
                     i--;
                 }
             } catch (IOException e) {
@@ -47,7 +46,7 @@ public class Main {
 
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(outFile))){
-            mergeSort(readerList, dataList, out);
+            mergeSort(pairs, out);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,7 +67,7 @@ public class Main {
         }
     }
 
-    private static boolean Comp(String a, String b){
+ /*   private static boolean Comp(String a, String b){
         if(isInteger){
             int n1 = Integer.parseInt(a);
             int n2 = Integer.parseInt(b);
@@ -78,29 +77,31 @@ public class Main {
             int l2=b.length();
             return l1 > l2 && !isReverse || l1 < l2 && isReverse;
         }
-    }
+    }*/
 
-    private static int findMinMax(List<String> dataList){
+    private static int findMinMax(List<Pair> pairs){
         int place=0;
-        for(int i=1;i<dataList.size();i++){
-            if(Comp(dataList.get(place),dataList.get(i)))
+        for(int i=1;i<pairs.size();i++){
+            if(Pair.Comp(pairs.get(place).getData(),pairs.get(i).getData(), isInteger, isReverse))
                 place=i;
         }
         return place;
     }
 
-    private static void mergeSort(List<BufferedReader> readerList, List<String> dataList, BufferedWriter out) throws IOException {
-       while (readerList.size()>0) {
-           int place = findMinMax(dataList);
-           out.write(dataList.get(place) + "\n");
+    private static void mergeSort(List<Pair> pairs, BufferedWriter out) throws IOException {
+       while (pairs.size()>0) {
+           int place = findMinMax(pairs);
+           out.write(pairs.get(place).getData() + "\n");
            try {
-               String temp =readData(readerList.get(place));
-               if(temp!=null && !Comp(dataList.get(place),temp))
-                    dataList.set(place, temp);
+               String temp =pairs.get(place).readData(isInteger);
+
+               if(temp!=null && !Pair.Comp(pairs.get(place).getData(),temp, isInteger, isReverse))
+                    pairs.get(place).setData(temp);
                else{
-                   readerList.get(place).close();
-                   readerList.remove(place);
-                   dataList.remove(place);
+                   pairs.get(place).getIn().close();
+                   if(temp!= null)
+                        System.out.println("Unsorted input data in file");
+                   pairs.remove(place);
                }
            } catch (IOException e) {
                e.printStackTrace();
@@ -109,7 +110,7 @@ public class Main {
        out.close();
     }
 
-    private static String readData(BufferedReader bufferedReader) throws IOException {
+    /*private static String readData(BufferedReader bufferedReader) throws IOException {
         String data = bufferedReader.readLine();
         if(!isInteger && data != null){
             for(int i=0;i<data.length();i++){
@@ -127,6 +128,6 @@ public class Main {
             }
         }
         return data;
-    }
+    }*/
 
 }
