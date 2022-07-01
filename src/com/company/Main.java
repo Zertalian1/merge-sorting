@@ -1,103 +1,31 @@
 package com.company;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     private static boolean isInteger = true;
     private static boolean isReverse = false;
 
 
-
-
     public static void main(String[] args) {
         int fileStart=parseParam(args);
-        String outFile = args[fileStart];
         String[] inputList = new String[args.length-++fileStart];
         if (args.length - fileStart >= 0) System.arraycopy(args, fileStart, inputList, 0, args.length - fileStart);
-        List<Pair> pairs = new ArrayList<>();
-        for (String s : inputList) {
-            FileReader fr;
-            try {
-                fr = new FileReader(s);
-                pairs.add(new Pair(new BufferedReader(fr)));
-            } catch (IOException e) {
-                e.printStackTrace();
 
-            }
-        }
-        for(int i= 0; i<pairs.size();i++){
-            String temp;
-            try {
-                temp = pairs.get(i).readData(isInteger);
-                if(temp!=null)
-                    pairs.get(i).setData(temp);
-                else{
-                    pairs.get(i).getIn().close();
-                    pairs.remove(i);
-                    i--;
-                }
-            } catch (IOException e) {
-            e.printStackTrace();
-            }
-        }
-
-
-
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(outFile))){
-            mergeSort(pairs, out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        MergeSort sort = new MergeSort(isInteger, isReverse);
+        sort.sort(args[fileStart-1],inputList);
     }
 
     private static int parseParam(String[] input){
         int j=0;
         while (true){
             switch (input[j]){
-                case "-s": isInteger=false; break;
-                case "-d": isReverse=true; break;
-                case "-a":
-                case "-i": break;
-                default: return j;
+                case "-s"-> isInteger=false;
+                case "-d"-> isReverse=true;
+                case "-a"-> isReverse=false;
+                case "-i"-> isInteger=true;
+                default-> {return j;}
             }
             j++;
         }
     }
-
-    private static int findMinMax(List<Pair> pairs){
-        int place=0;
-        for(int i=1;i<pairs.size();i++){
-            if(Pair.Comp(pairs.get(place).getData(),pairs.get(i).getData(), isInteger, isReverse))
-                place=i;
-        }
-        return place;
-    }
-
-    private static void mergeSort(List<Pair> pairs, BufferedWriter out) throws IOException {
-       while (pairs.size()>0) {
-           int place = findMinMax(pairs);
-           out.write(pairs.get(place).getData() + "\n");
-           try {
-               String temp =pairs.get(place).readData(isInteger);
-
-               if(temp!=null && !Pair.Comp(pairs.get(place).getData(),temp, isInteger, isReverse))
-                    pairs.get(place).setData(temp);
-               else{
-                   pairs.get(place).getIn().close();
-                   if(temp!= null)
-                        System.out.println("Unsorted input data in file");
-                   pairs.remove(place);
-               }
-           } catch (IOException e) {
-               e.printStackTrace();
-           }
-       }
-       out.close();
-    }
-
-
 
 }
